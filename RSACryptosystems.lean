@@ -31,7 +31,7 @@ try apply Nat.zero_lt_of_ne_zero
 assumption
 try apply h 
 
-  
+
 def inverse (a : ℕ) (b : ℕ) : ℕ := 
   let (x, _) := Nat.xgcd a b
   if x < 0 then 
