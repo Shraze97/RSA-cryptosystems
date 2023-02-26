@@ -10,10 +10,10 @@ The RSA key generation procedure is as follows.
 
 ALGORITHM 1 RSA: Key Generation
 1. Fix a key length, say, $2^{r}$ bits.
-2. Randomly select two distinct primes $p$ and $q$ each of $2^{r-1} bits.
+2. Randomly select two distinct primes $p$ and $q$ each of $2^{r-1}$ bits.
 3. Let $n = pq$ and $\phi(n) = (p-1)(q-1)$, the totient function.
 4. Randomly select an $e$ such that $3\le e\le \phi(n)$ and $gcd(3,\phi(n))=1$.
-5. Find the smallest $d$ such that $d \times e = 1 mod \phi(n)$.
+5. Find the smallest $d$ such that $d \dot e = 1 \mod \phi(n)$.
 6. The encryption key is the pair $(n, e)$.
 7. The decryption key is $d$.
 
