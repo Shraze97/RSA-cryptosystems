@@ -1,25 +1,27 @@
 import Mathlib
-<<<<<<< HEAD
 import RSAcryptosystems
 
 
 theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=
   by
   rw[mod_pow]
-  by_cases h : b = 0 
-  · simp[h]
-    
-  · simp[mod_pow_aux_eq h]
+  have h' : n > 1 := by
+    sorry
+  by_cases h : b = 0
+  · simp[h, h', Nat.mod_eq_of_lt]
+  · simp[h, h']
+    sorry
+
+--#check Nat.Finset.BigOperators.Commute.add_pow
+theorem freshman's_dream (a b : ℕ) (hp : Prime p) : (a + b) ^ p = a ^ p + b ^ p :=
+  by 
+  sorry
 
 
 theorem fermat_little_theorem (p : ℕ) (hp : Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 :=
-  by 
-    sorry 
+  sorry
+
 
 theorem ende : (decryption e n (encryption e n m)) = m :=
   by
   sorry
-=======
-import RSACryptosystems
-import Lemmas
->>>>>>> 51191a2f69970780000daf164d9f78b8e0290646
