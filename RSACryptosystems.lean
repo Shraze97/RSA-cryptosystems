@@ -4,6 +4,7 @@ import Init
 
 
 def mod_pow (a : ℕ) (b : ℕ) (n : ℕ) : ℕ :=
+  if n = 0 then 0 else
   match b with 
   | 0 => 1
   | 1 => a % n
@@ -51,7 +52,7 @@ structure Key_pair : Type where
   Private_key := (n,d)
   deriving Repr
 
-#check Key_pair.Public_key
+#check Key_pair
 /- The key generation Function-/
 def key_generation1 (p : ℕ) (q : ℕ)(e : ℕ )(hp : Nat.Prime p)(hq : Nat.Prime q)(ho : p ≠ q) : Key_pair := 
   let n := p * q 
@@ -70,7 +71,7 @@ def key_generation (p : ℕ) (q : ℕ)(e : ℕ ) : ℕ ×  ℕ  :=
   else
   let r := e % phi 
   if Nat.gcd r phi = 1 then
-    let d  :=  inverse r phi
+    let d  :=  inverse r phi 
     if  r > 2  then 
       (n,d)
     else 
