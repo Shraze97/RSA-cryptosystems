@@ -1,14 +1,14 @@
 import Mathlib
-import RSAcryptosystems
+import RSACryptosystems
+
 
 
 theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=
   by
-  rw[mod_pow]
-  by_cases h : b = 0 
+  by_cases h : n = 0
   · simp[h]
-    
-  · simp[mod_pow_aux_eq h]
+    rw[mod_pow]
+
 
 
 theorem fermat_little_theorem (p : ℕ) (hp : Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 :=
