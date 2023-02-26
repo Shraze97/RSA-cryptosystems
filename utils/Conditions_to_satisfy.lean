@@ -1,4 +1,5 @@
 import Mathlib
+<<<<<<< HEAD
 import RSAcryptosystems
 
 
@@ -18,3 +19,7 @@ theorem fermat_little_theorem (p : ℕ) (hp : Prime p) (a : ℕ) : a ^ (p - 1) %
 theorem ende : (decryption e n (encryption e n m)) = m :=
   by
   sorry
+=======
+import RSACryptosystems
+import Lemmas
+>>>>>>> 51191a2f69970780000daf164d9f78b8e0290646
