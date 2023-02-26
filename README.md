@@ -22,14 +22,14 @@ The public key consists of the modulus $n$ and the public (or encryption) expone
 ALGORITHM 2 RSA: Encryption
 1. Let $m$ be the message to be encrypted.
 2. Treat $m$ as a number less than $n$, and assume that $gcd(m, n) = 1$.
-3. Compute $c = m^{e} mod n$.
+3. Compute $c = m^{e} \mod n$.
 4. $c$ is the encrypted message.
 
 The assumption that $gcd(m, n) = 1$ is not very binding - in practice, we can ensure this using a little bit of
 ‘padding’ on $m$. At the receiver’s end the message is decrypted using $d$ as follows,
 
 ALGORITHM 3 RSA: Decryption
-1. Compute $c^{d} mod n = m^{ed} mod n = m.
+1. Compute $c^{d} \mod n = m^{ed} \mod n = m$.
 
 Since $n$ is given as part of the public key, if we can factor $n$ efficiently we can compute the private key
-$d = e^{−1} mod \phi(n)$ using extended Euclidean algorithm. However, as yet no efficient (i.e. randomized polynomial time) algorithm is known for integer factoring. The current best factoring algorithms have subexponential, but superpolynomial, time complexity.
+$d = e^{−1} \mod \phi(n)$ using extended Euclidean algorithm. However, as yet no efficient (i.e. randomized polynomial time) algorithm is known for integer factoring. The current best factoring algorithms have subexponential, but superpolynomial, time complexity.
