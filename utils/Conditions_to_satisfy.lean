@@ -1,5 +1,6 @@
 import Mathlib
-import RSAcryptosystems
+import RSACryptosystems
+
 
 
 theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=

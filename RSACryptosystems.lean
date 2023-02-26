@@ -4,7 +4,8 @@ import Init
 
 
 def mod_pow (a : ℕ) (b : ℕ) (n : ℕ) : ℕ :=
-  if n = 0 then 0 else
+  if n = 0 then 0 
+  else
   match b with 
   | 0 => 1
   | 1 => a % n
@@ -32,58 +33,45 @@ def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ :=
   else
     Int.toNat x
 
-structure Public_key : Type where 
-  n : ℕ
-  e : ℕ
+structure Public_key  where 
+  mk :: (n : ℕ) (e : ℕ)
   deriving Repr
-
-structure Key_pair : Type where 
+#check Public_key 
+structure Key_pair extends Public_key where
   p : ℕ
   hp : Nat.Prime p
   q : ℕ 
   hq : Nat.Prime q
   ho : p ≠ q
-  n := p * q 
-  phi := Nat.lcm (p - 1) (q - 1)
-  e : ℕ
-  he : 2 < e ∧ Nat.gcd e phi = 1
-  d := inverse e phi he.right
-  Public_key := (n,e)
-  Private_key := (n,d)
+  hn : n = p * q
+  he : 2 < e ∧ Nat.gcd e (Nat.lcm (p - 1) (q - 1)) = 1
   deriving Repr
 
-#check Key_pair
 /- The key generation Function-/
-def key_generation1 (p : ℕ) (q : ℕ)(e : ℕ )(hp : Nat.Prime p)(hq : Nat.Prime q)(ho : p ≠ q) : Key_pair := 
-  let n := p * q 
-  let phi := Nat.lcm (p - 1) (q - 1)
-  if p = q then 
-    (n,0) 
-  else
+def value_d(a : Key_pair) : ℕ   :=
+  let d := inverse a.e (Nat.lcm (a.p - 1) (a.q - 1)) a.he.right
+  d
 
+structure Private_key extends Key_pair where
+  d : ℕ
+  hd : d = (value_d toKey_pair)
+  deriving Repr
 
+def key_generation  (a : Key_pair) : Private_key := 
+  let d := (value_d a)
+  have h : d = (value_d a) := rfl
+  Private_key.mk a d h
 
-def key_generation (p : ℕ) (q : ℕ)(e : ℕ ) : ℕ ×  ℕ  := 
-  let n := p * q 
-  let phi := Nat.lcm (p - 1) (q - 1)
-  if p = q then 
-    (n,0) 
-  else
-  let r := e % phi 
-  if Nat.gcd r phi = 1 then
-    let d  :=  inverse r phi 
-    if  r > 2  then 
-      (n,d)
-    else 
-      (n,0)
-  else
-    (n,0)
-
-/- The decryption Function-/
-def decryption (d : ℕ) (n : ℕ) (me : ℕ) : ℕ := 
-  mod_pow me d n
-
+#check Key_pair
 
 /- The encryption Function-/
-def encryption (e : ℕ)(n : ℕ) (m : ℕ) : ℕ := 
-  mod_pow m e n
+def encryption (a : Public_key) (m : ℕ) : ℕ := 
+  mod_pow m a.e a.n
+
+
+/- The decryption Function-/
+def decryption (b : Private_key)(me : ℕ) : ℕ := 
+  mod_pow me b.d b.n
+
+
+
