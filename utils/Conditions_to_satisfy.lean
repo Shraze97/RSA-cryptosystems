@@ -22,26 +22,17 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
     rw[Finset.subset_iff]
     simp 
   rw[←Finset.sum_sdiff h1 ]
-  have h2 : 0 ≠p := by 
+  have h2 : 0 ≠ p := by 
     sorry
   rw[Finset.sum_pair h2] 
   simp 
   rw[Nat.modEq_iff_dvd']
   rw[Nat.sub_add_eq,← Nat.add_assoc]
-  simp
+  simp[← Nat.add_le_add_left]
   sorry
 
-  
 
-  
-
-
-
-
-
-
-
-theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 :=
+theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
   sorry
 
 theorem ende : (decryption e n (encryption e n m)) = m :=
