@@ -25,6 +25,7 @@ have h3 : b + 1 < b + 2 := by
 simp[Nat.succ_eq_add_one]
 apply h3
 
+-- def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ :=
 
 def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ := 
   let (x, _) := Nat.xgcd a b
