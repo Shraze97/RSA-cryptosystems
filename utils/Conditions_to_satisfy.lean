@@ -38,7 +38,7 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
   sorry  
 -/
 
-theorem freshman's_dream' (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
+theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
   rw[← Nat.ModEq]
   rw[add_pow]
   rw[Nat.ModEq.comm]
@@ -52,13 +52,30 @@ theorem freshman's_dream' (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (
     rw[h3] 
   rw[Finset.sum_pair h2] 
   simp
-  have h3 : (a ^ p) ≡ (a ^ p) [MOD p] := by
-    rw[Nat.ModEq] 
-  have h4 : (b ^ p) ≡ (b ^ p) [MOD p] := by
-    rw[Nat.ModEq] 
-  rw[Nat.add_comm (a ^ p) (b ^ p)]  
-  apply Nat.ModEq.add_right_cancel h3
-  apply Nat.ModEq.add_right_cancel h4
+  rw[Nat.add_comm (a ^ p) (b ^ p)]
+  nth_rewrite 1[← Nat.add_zero (b ^ p + a ^ p)] 
+  rw[Nat.add_comm] 
+  apply Nat.ModEq.add_right 
+  apply Nat.ModEq.symm 
+  rw[Nat.modEq_zero_iff_dvd]
+  apply Finset.dvd_sum 
+  intro i hi  
+  have h3 : Nat.choose p i ≡ 0 [MOD p]:= by
+    rw[Nat.modEq_zero_iff_dvd] 
+    apply Nat.Prime.dvd_choose_self hp
+    intro h4
+    rw[h4] at hi 
+    simp at hi 
+    simp[Finset.range] at hi 
+    cases hi 
+    · rename_i left
+      rw[left] at h2 
+      contradiction
+    · rename_i right
+      rw[right] at h2 
+      contradiction
+  rw[Nat.modEq_zero_iff_dvd] at h3  
+  --apply Nat.mul_dvd_mul_iff_left
   sorry
 
 theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
@@ -74,3 +91,5 @@ theorem ende : (decryption e n (encryption e n m)) = m := by
 
 #check Nat.Prime.ne_zero
 #check Nat.Prime.dvd_choose_self
+#check Nat.ModEq.add_right_cancel
+#check Finset.mem_range
