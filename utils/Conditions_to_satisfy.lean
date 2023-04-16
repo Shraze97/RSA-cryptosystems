@@ -15,6 +15,7 @@ theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=
 #check Commute.add_pow
 #check Nat.Prime.dvd_choose_self
 
+/-
 theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
   rw[← Nat.ModEq]
   rw[add_pow]
@@ -35,7 +36,7 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
   rw[Nat.add_comm] 
   linarith 
   sorry  
-
+-/
 
 theorem freshman's_dream' (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
   rw[← Nat.ModEq]
@@ -55,13 +56,9 @@ theorem freshman's_dream' (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (
     rw[Nat.ModEq] 
   have h4 : (b ^ p) ≡ (b ^ p) [MOD p] := by
     rw[Nat.ModEq] 
-  rw[Nat.add_comm (a ^ p) (b ^ p)] 
-/-generalize a ^ p + b ^ p = c
-  generalize b ^ p + a ^ p = d
-  have h4 : c ≡ d [MOD p] := by
-    rw[h3]-/
-  --rw[← Nat.ModEq.add_right_cancel h3] 
-  --apply Nat.ModEq.add_right_cancel h3 
+  rw[Nat.add_comm (a ^ p) (b ^ p)]  
+  apply Nat.ModEq.add_right_cancel h3
+  apply Nat.ModEq.add_right_cancel h4
   sorry
 
 theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
