@@ -15,29 +15,6 @@ theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=
 #check Commute.add_pow
 #check Nat.Prime.dvd_choose_self
 
-/-
-theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
-  rw[← Nat.ModEq]
-  rw[add_pow]
-  rw[Nat.ModEq.comm]
-  have h1 : {0, p} ⊆  Finset.range (p + 1) := by 
-    rw[Finset.subset_iff]
-    simp 
-  rw[←Finset.sum_sdiff h1]
-  have h2 : 0 ≠ p := by 
-    intro h3 
-    apply Nat.Prime.ne_zero hp
-    rw[h3] 
-  rw[Finset.sum_pair h2] 
-  simp 
-  rw[Nat.modEq_iff_dvd']
-  rw[Nat.sub_add_eq,← Nat.add_assoc]
-  simp[Nat.add_le_add_left] 
-  rw[Nat.add_comm] 
-  linarith 
-  sorry  
--/
-
 theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
   rw[← Nat.ModEq]
   rw[add_pow]
@@ -59,7 +36,8 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
   apply Nat.ModEq.symm 
   rw[Nat.modEq_zero_iff_dvd]
   apply Finset.dvd_sum 
-  intro i hi  
+  intro i hi 
+  rw[← Nat.modEq_zero_iff_dvd] 
   have h3 : Nat.choose p i ≡ 0 [MOD p]:= by
     rw[Nat.modEq_zero_iff_dvd] 
     apply Nat.Prime.dvd_choose_self hp
@@ -68,15 +46,14 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
     simp at hi 
     simp[Finset.range] at hi 
     cases hi 
-    · rename_i left
-      rw[left] at h2 
-      contradiction
-    · rename_i right
-      rw[right] at h2 
-      contradiction
-  rw[Nat.modEq_zero_iff_dvd] at h3  
-  --apply Nat.mul_dvd_mul_iff_left
-  sorry
+    rename_i left right 
+    cases left 
+    · rename_i left'
+      rw[left'] at right
+      simp at right
+    · rename_i right' 
+      assumption
+  apply Nat.ModEq.mul_left (a^i * b^(p-i)) h3
 
 theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
   
