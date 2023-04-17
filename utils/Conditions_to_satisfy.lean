@@ -15,7 +15,7 @@ theorem mod_pow_eq :  mod_pow a b n = (a ^ b) % n :=
 #check Commute.add_pow
 #check Nat.Prime.dvd_choose_self
 
-theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p)%p := by
+theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p) % p := by
   rw[← Nat.ModEq]
   rw[add_pow]
   rw[Nat.ModEq.comm]
@@ -56,8 +56,40 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
   apply Nat.ModEq.mul_left (a^i * b^(p-i)) h3
 
 theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
-  
   sorry
+
+theorem fermat_little_theorem' (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ p ≡ a [MOD p] := by
+  induction a 
+  · simp 
+    have h1 : 0 ^ p = 0 := by
+      simp
+      have h2 : p ≠ 0 := by 
+        intro h3 
+        apply Nat.Prime.ne_zero hp
+        rw[h3] 
+      have h4 : (p = 0 ∨ 0 < p) := by
+        apply Nat.eq_zero_or_pos p 
+      cases h4 
+      · rename_i left 
+        rw[left] at h2 
+        contradiction
+      · rename_i right
+        assumption
+    simp[h1]
+    trivial 
+  · rename_i k base
+    rw[← Nat.add_one k]
+    have h1 : (k + 1) ^ p ≡ k ^ p + 1 ^ p [MOD p] := by
+      apply freshman's_dream
+      assumption
+    have h2 : k ^ p + 1 ^ p ≡ k ^ p + 1 [MOD p] := by
+      simp
+      trivial 
+    have h3 : (k + 1) ^ p ≡ k ^ p + 1 [MOD p] := by
+      apply Nat.ModEq.trans h1 h2
+    have h4 : k ^ p + 1 ≡ k + 1 [MOD p] := by
+       apply Nat.ModEq.add_right _ base
+    apply Nat.ModEq.trans h3 h4  
 
 theorem ende : (decryption e n (encryption e n m)) = m := by
   rw[decryption]
@@ -70,3 +102,4 @@ theorem ende : (decryption e n (encryption e n m)) = m := by
 #check Nat.Prime.dvd_choose_self
 #check Nat.ModEq.add_right_cancel
 #check Finset.mem_range
+#check Nat.eq_zero_or_pos
