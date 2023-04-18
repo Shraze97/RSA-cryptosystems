@@ -46,20 +46,17 @@ theorem mod_pow_eq (pos: n ≠ 1): mod_pow a b n = (a ^ b) % n := by
   sorry
 -/
 
-theorem mod_pow_eq' (pos: n ≠ 1)(a : ℕ ) (b : ℕ) (n : ℕ): mod_pow a b n hneq = (a ^ b) % n := by
+theorem mod_pow_eq' (pos: n ≠ 1)(a : ℕ)(b : ℕ)(n : ℕ): mod_pow a b n = (a ^ b) % n := by
   rw[mod_pow]
   split_ifs
   · rename_i k h1
-
-    
-
 
 
 theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p) % p := by
   rw[← Nat.ModEq]
   rw[add_pow]
   rw[Nat.ModEq.comm]
-  have h1 : {0, p} ⊆  Finset.range (p + 1) := by 
+  have h1 : {0, p} ⊆ Finset.range (p + 1) := by 
     rw[Finset.subset_iff]
     simp 
   rw[←Finset.sum_sdiff h1]
@@ -85,7 +82,7 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
     rw[h4] at hi 
     simp at hi 
     simp[Finset.range] at hi 
-    cases hi 
+    cases hi
     rename_i left right 
     cases left 
     · rename_i left'
@@ -95,24 +92,12 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
       assumption
   apply Nat.ModEq.mul_left (a ^ i * b ^ (p - i)) h3
 
-
 theorem fermat_little_theorem' (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ p ≡ a [MOD p] := by
   induction a 
   · simp 
     have h1 : 0 ^ p = 0 := by
       simp
-      have h2 : p ≠ 0 := by 
-        intro h3 
-        apply Nat.Prime.ne_zero hp
-        rw[h3] 
-      have h4 : (p = 0 ∨ 0 < p) := by
-        apply Nat.eq_zero_or_pos p  
-      cases h4 
-      · rename_i left 
-        rw[left] at h2 
-        contradiction
-      · rename_i right
-        assumption
+      apply Nat.Prime.pos hp
     simp[h1]
     trivial 
   · rename_i k base
@@ -146,7 +131,7 @@ theorem fermat_little_theorem' (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ p �
       simp
     rw[← h'']
     assumption  
-  have h3 : a ^ (p - 1) ≡ 1 [MOD p] :=  Nat.ModEq.cancel_left_of_coprime hpneqn lem
+  have h3 : a ^ (p - 1) ≡ 1 [MOD p] := Nat.ModEq.cancel_left_of_coprime hpneqn lem
   have h4 : a ^ (p - 1) % p = 1 % p := by
     rw[h3]
   have h5 : 1 % p = 1 := by
