@@ -17,12 +17,15 @@ termination_by _ _ => b
 decreasing_by      
 have h : 1 < 2 := by norm_num
 simp 
-have h3 : k + 1 < k + 2 := by
-  apply Nat.add_lt_add_left
-  apply h
-simp[Nat.succ_eq_add_one]
-rename_i h1
-assumption
+have h3 : k/2  + 1 < k + 1 + 1 := by
+  sorry
+have h4 : k + 1 < k + 1 + 1 := by
+  sorry
+simp[Nat.succ_eq_add_one] 
+try apply h3
+try apply h4
+
+
 
 -- def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ :=
 
