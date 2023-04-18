@@ -3,39 +3,39 @@ import Init
 
 
 
-def mod_pow (a : ℕ) (b : ℕ) (n : ℕ) : ℕ :=
-  if n = 0 then 0 
-  else
+def mod_pow (a : ℕ) (b : ℕ) (n : ℕ)(hneq : n ≠ 0 ) : ℕ :=
   match b with 
   | 0 => 1
   | 1 => a % n
-  | b + 2 => 
-    if b%2 = 0 then 
-    let c := mod_pow a (b+2/2) n
+  | k + 2 => 
+    if k % 2 = 0 then 
+    let c := mod_pow a ((k + 2)/2) n hneq 
     (c * c) % n
   else 
-    (a * (mod_pow a (b + 1) n)) % n
+    (a * (mod_pow a (k + 1) n hneq)) % n
 termination_by _ _ => b
 decreasing_by      
 have h : 1 < 2 := by norm_num
 simp 
-have h3 : b + 1 < b + 2 := by
+have h3 : k + 1 < k + 2 := by
   apply Nat.add_lt_add_left
   apply h
 simp[Nat.succ_eq_add_one]
-apply h3
+rename_i h1
+assumption
 
 -- def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ :=
 
 def inverse (a : ℕ) (b : ℕ)(h : (Nat.gcd a b) = 1) : ℕ := 
   let (x, _) := Nat.xgcd a b
   if x < 0 then 
-    Int.toNat (x + b)
-  else
-    Int.toNat x
+
+  
 
 structure Public_key  where 
-  mk :: (n : ℕ) (e : ℕ)
+  n : ℕ 
+  e : ℕ 
+  hneq0 : n ≠ 0 
   deriving Repr
 #check Public_key 
 structure Key_pair extends Public_key where
@@ -67,12 +67,12 @@ def key_generation  (a : Key_pair) : Private_key :=
 
 /- The encryption Function-/
 def encryption (a : Public_key) (m : ℕ) : ℕ := 
-  mod_pow m a.e a.n
+  mod_pow m a.e a.n a.hneq0 
 
 
 /- The decryption Function-/
 def decryption (b : Private_key)(me : ℕ) : ℕ := 
-  mod_pow me b.d b.n
+  mod_pow me b.d b.n b.hneq0
 
 
 

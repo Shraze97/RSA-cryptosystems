@@ -1,6 +1,7 @@
 import Mathlib
 import RSACryptosystems
 
+/-
 theorem mod_pow_eq (pos: n ≠ 1): mod_pow a b n = (a ^ b) % n := by
   rw[mod_pow]
   split_ifs
@@ -33,27 +34,25 @@ theorem mod_pow_eq (pos: n ≠ 1): mod_pow a b n = (a ^ b) % n := by
     simp
   · rename_i h1 h2 h3
     simp 
-    induction a
+    induction b
     · simp 
-      have h4 : 0 ^ b = 0 := by
-        simp
-        have h4 : (b = 0 ∨ 0 < b) := by
-          apply Nat.eq_zero_or_pos b
-        cases h4 
-        · rename_i left 
-          rw[left] at h2 
-          contradiction
-        · rename_i right
-          assumption
-      simp[h4]
+      rw[mod_pow]
+      simp 
+    · rename_i k base 
+      rw[← Nat.add_one k]   
 
-    · rename_i k base
-      rw[← Nat.add_one k] 
-
-  · rename_i h1 h2 h3 
-    
+  · rename_i h1 h2 h3    
 
   sorry
+-/
+
+theorem mod_pow_eq' (pos: n ≠ 1)(a : ℕ ) (b : ℕ) (n : ℕ): mod_pow a b n hneq = (a ^ b) % n := by
+  rw[mod_pow]
+  split_ifs
+  · rename_i k h1
+
+    
+
 
 
 theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a ^ p + b ^ p) % p := by
@@ -96,8 +95,6 @@ theorem freshman's_dream (a b : ℕ) (hp : Nat.Prime p) : ((a + b) ^ p) % p = (a
       assumption
   apply Nat.ModEq.mul_left (a ^ i * b ^ (p - i)) h3
 
-theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ (p - 1) % p = 1 := by
-  sorry
 
 theorem fermat_little_theorem' (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ p ≡ a [MOD p] := by
   induction a 
@@ -132,6 +129,33 @@ theorem fermat_little_theorem' (p : ℕ) (hp : Nat.Prime p) (a : ℕ) : a ^ p �
        apply Nat.ModEq.add_right _ base
     apply Nat.ModEq.trans h3 h4  
 
+  theorem fermat_little_theorem (p : ℕ) (hp : Nat.Prime p) (a : ℕ)(hpneqn : ¬(p ∣ a)) : a ^ (p - 1) % p = 1 := by
+  rw[← Nat.Prime.coprime_iff_not_dvd hp] at hpneqn
+  rw[Nat.coprime_iff_gcd_eq_one] at hpneqn
+  have h1 : a ^ p ≡ a [MOD p] := fermat_little_theorem' p hp a
+  have lem : a * a ^ (p - 1) ≡ a * 1 [MOD p] := by
+    have h' : a = a * 1 := by
+      simp
+    rw[← h']
+    have h'' : a ^ p = a * a ^ (p - 1) := by
+      have h''' : p - 1 + 1 = p := by
+        apply Nat.sub_add_cancel hp.pos
+      rw[add_comm] at h'''
+      nth_rewrite 1[← h'''] 
+      rw[pow_add]
+      simp
+    rw[← h'']
+    assumption  
+  have h3 : a ^ (p - 1) ≡ 1 [MOD p] :=  Nat.ModEq.cancel_left_of_coprime hpneqn lem
+  have h4 : a ^ (p - 1) % p = 1 % p := by
+    rw[h3]
+  have h5 : 1 % p = 1 := by
+    have h6 : (p > 1) := by
+      apply Nat.Prime.one_lt hp
+    apply Nat.mod_eq_of_lt h6 
+  rw[h5] at h4  
+  assumption
+
 theorem ende (h : n ≠ 1): (decryption e n (encryption e n m)) = m := by
   rw[decryption]
   rw[encryption]
@@ -145,3 +169,4 @@ theorem ende (h : n ≠ 1): (decryption e n (encryption e n m)) = m := by
 #check Nat.ModEq.add_right_cancel
 #check Finset.mem_range
 #check Nat.eq_zero_or_pos
+#check pow_add
